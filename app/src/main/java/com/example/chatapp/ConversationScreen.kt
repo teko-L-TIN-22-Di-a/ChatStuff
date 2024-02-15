@@ -1,7 +1,6 @@
 package com.example.chatapp
 
-import SampleData
-import android.content.res.Configuration
+import com.example.chatapp.data.SampleData
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -93,16 +92,16 @@ fun Conversation(messages: List<Message>, contact: Contact) {
     }
 }
 
-@Preview
-@Composable
-fun PreviewConversation() {
-    ChatAppTheme {
-        val vModel: ChatViewModel = viewModel()
-        val uiState by vModel.uiState.collectAsState()
-
-        Conversation(SampleData.conversationSample, uiState.currentConversationContact)
-    }
-}
+//@Preview
+//@Composable
+//fun PreviewConversation() {
+//    ChatAppTheme {
+//        val vModel: ChatViewModel = viewModel()
+//        val uiState by vModel.uiState.collectAsState()
+//
+//        Conversation(SampleData.conversationSample, uiState.currentConversationContact)
+//    }
+//}
 
 //@Preview(name = "Light Mode")
 //@Preview(

@@ -22,14 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import com.example.chatapp.data.DatabaseState
+import com.example.chatapp.data.SampleDataContacts
 
-data class Contact(val id: Int, val name: String, val excerpt: String, val profilePicture: Int)
+data class Contact(val uid: Int, val name: String, val excerpt: String, val profilePicture: Int)
 
 @Composable
-fun ContactCard(contact: Contact, onContactClick: (Contact) -> Unit = {}) {
+fun ContactCard(contact: Friend, onContactClick: (Friend) -> Unit = {}) {
     Row(modifier = Modifier.clickable { onContactClick(contact) }) {
         Image(
-            painter = painterResource(contact.profilePicture), // replace with user icon
+            painter = painterResource(R.drawable.hito), // replace with user icon
             contentDescription = "Contact profile picture", //idc
             modifier = Modifier
                 .size(52.dp)
@@ -48,7 +51,7 @@ fun ContactCard(contact: Contact, onContactClick: (Contact) -> Unit = {}) {
 
 
             Text(
-                text = contact.excerpt,
+                text = "friend.excerpt",
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.padding(all = 4.dp),
                 maxLines = 1,
@@ -61,20 +64,20 @@ fun ContactCard(contact: Contact, onContactClick: (Contact) -> Unit = {}) {
 
 @Composable
 fun ContactScreen(
-    contacts: List<Contact>,
-    onContactClick: (Contact) -> Unit = {}
+    dbModel: DatabaseState,
+    onContactClick: (Friend) -> Unit = {}
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(16.dp)) {
-        items(contacts) {contact ->
+        items(dbModel.friendList) {contact ->
             ContactCard(contact, onContactClick = {onContactClick(contact)})
         }
     }
 }
 
-@Preview
-@Composable
-fun ContactPreview() {
-    ContactScreen(contacts = SampleDataContacts.contactsSample)
-}
+//@Preview
+//@Composable
+//fun ContactPreview() {
+//    ContactScreen(contacts = SampleDataContacts.contactsSample)
+//}

@@ -2,6 +2,8 @@
     <string name="app_name">ChatApp</string>
     <string name="messagesTitle">Nachrichten</string>
     <string name="contactTitle">Kontakte</string>
+    <string name="loginTitle">Login</string>
+    <string name="signUpTitle">Benutzer erstellen</string>
     <string name="optionsTitle">Einstellungen</string>
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -9,6 +11,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="default_web_client_id">975759656123-v2e7403ea0h679r3jauvnf7i4n85ku1k.apps.googleusercontent.com</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

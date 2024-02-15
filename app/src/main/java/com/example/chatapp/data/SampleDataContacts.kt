@@ -1,8 +1,11 @@
-package com.example.chatapp
+package com.example.chatapp.data
+
+import com.example.chatapp.Contact
+import com.example.chatapp.R
 
 
 /**
- * SampleData for Jetpack Compose Tutorial 
+ * com.example.chatapp.data.SampleData for Jetpack Compose Tutorial
  */
 object SampleDataContacts {
     val contactsSample = listOf(

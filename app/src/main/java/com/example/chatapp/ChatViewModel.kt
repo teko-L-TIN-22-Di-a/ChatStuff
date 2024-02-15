@@ -23,7 +23,7 @@ class ChatViewModel: ViewModel() {
         }
     }
 
-    fun setCurrentConversation(value: Contact) {
+    fun setCurrentConversation(value: Friend) {
         _uiState.update { currentState ->
             currentState.copy(
                 currentConversationContact = value

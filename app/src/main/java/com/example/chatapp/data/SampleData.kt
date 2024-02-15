@@ -1,7 +1,9 @@
+package com.example.chatapp.data
+
 import com.example.chatapp.Message
 
 /**
- * SampleData for Jetpack Compose Tutorial 
+ * com.example.chatapp.data.SampleData for Jetpack Compose Tutorial
  */
 object SampleData {
     // Sample conversation data

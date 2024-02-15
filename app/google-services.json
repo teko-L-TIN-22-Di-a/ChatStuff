@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "975759656123",
+    "project_id": "chatappteko",
+    "storage_bucket": "chatappteko.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975759656123:android:83c12054468317f87c159e",
+        "android_client_info": {
+          "package_name": "com.example.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975759656123-v2e7403ea0h679r3jauvnf7i4n85ku1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatapp",
+            "certificate_hash": "7e14980edb285230fddf1d29c460c595ec594f48"
+          }
+        },
+        {
+          "client_id": "975759656123-6e5bqg527rg1qsr4ue078unhhoc87ucv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3V5qSF9uRefqbch4EDdRkEQ-EL1QButE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975759656123-6e5bqg527rg1qsr4ue078unhhoc87ucv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
