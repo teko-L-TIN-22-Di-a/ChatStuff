@@ -1,7 +1,7 @@
 package com.example.chatapp.data
 
-import com.example.chatapp.Contact
-import com.example.chatapp.Friend
+import com.example.chatapp.models.Contact
+import com.example.chatapp.models.Friend
 
 data class UiState (
     val darkMode: Boolean = false,

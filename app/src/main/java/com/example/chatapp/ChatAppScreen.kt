@@ -36,7 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.chatapp.authentication.LoginScreen
 import com.example.chatapp.authentication.SignUpScreen
-import com.example.chatapp.data.SampleDataContacts
+import com.example.chatapp.models.Conversation
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -118,6 +118,7 @@ fun ChatApp(
 
     if(user != null && dbModel.friendList.isEmpty()) {
         dataBaseModel.getFriendlist()
+        dataBaseModel.getConversationList()
     }
 
     Scaffold(
@@ -148,10 +149,16 @@ fun ChatApp(
             }
 
             composable(route = ChatRoutes.Conversation.name) {
-//                val currentMessages =
-//                    SampleData.conversationSample.filter { it.id == uiState.currentConversationContact.uid }
+                val currentConversation =
+                    dbModel.conversationList.filter {
+                        if(it.users != null) {
+                            it.users.contains(uiState.currentConversationContact.uid)
+                        } else {
+                            false
+                        }
+                    }.first()
 
-//                Conversation(currentMessages, uiState.currentConversationContact)
+                ConversationScreen(currentConversation, uiState.currentConversationContact)
             }
 
             composable(route = ChatRoutes.Login.name) {
@@ -163,8 +170,6 @@ fun ChatApp(
             }
 
             composable(route = ChatRoutes.Contacts.name) {
-                //load contacts
-
                 ContactScreen(
                     dbModel,
                     onContactClick = {

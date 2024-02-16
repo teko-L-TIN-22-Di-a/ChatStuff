@@ -31,16 +31,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.chatapp.models.Contact
+import com.example.chatapp.models.Conversation
+import com.example.chatapp.models.Friend
+import com.example.chatapp.models.Message
 import com.example.chatapp.ui.theme.ChatAppTheme
-
-data class Message(val id: Int, val author: String, val body: String)
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 
 @Composable
-fun MessageCard(msg: Message, contact: Contact) {
+fun MessageCard(msg: Message, contact: Friend) {
+    val myUser = Firebase.auth.currentUser
+
+    var picture = if(myUser?.uid == msg.uid) painterResource(R.drawable.hito) else painterResource(R.drawable.chris)
+    var name = if(myUser?.uid == msg.uid) "Ich" else contact.name
+    var surfaceColor = if(myUser?.uid == msg.uid) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Image(
-            painter = painterResource(contact.profilePicture),
+            painter = picture,
             contentDescription = "Contact profile picture",
             modifier = Modifier
                 .size(40.dp)
@@ -50,15 +60,14 @@ fun MessageCard(msg: Message, contact: Contact) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        var isExpanded by remember { mutableStateOf(false)}
-        val surfaceColor by animateColorAsState(
-            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-            label = "",
-        )
+//        val surfaceColor by animateColorAsState(
+//            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+//            label = "",
+//        )
 
-        Column (modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+        Column {
             Text(
-                text = contact.name,
+                text = name,
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall)
             Spacer(modifier = Modifier.height(4.dp))
@@ -67,12 +76,14 @@ fun MessageCard(msg: Message, contact: Contact) {
                 shape = MaterialTheme.shapes.medium,
                 shadowElevation = 1.dp,
                 color = surfaceColor,
-                modifier = Modifier.animateContentSize().padding(1.dp)
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(1.dp)
             ) {
                 Text(
-                    text = msg.body,
+                    text = msg.text,
                     modifier = Modifier.padding(all = 4.dp),
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                    maxLines = Int.MAX_VALUE,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -84,10 +95,12 @@ fun MessageCard(msg: Message, contact: Contact) {
 }
 
 @Composable
-fun Conversation(messages: List<Message>, contact: Contact) {
+fun ConversationScreen(conversation: Conversation, contact: Friend) {
     LazyColumn {
-        items(messages) {message ->
-            MessageCard(message, contact);
+        if(conversation.messages != null) {
+            items(conversation.messages.sortedBy { x -> x.timestamp }) { message ->
+                MessageCard(message, contact);
+            }
         }
     }
 }

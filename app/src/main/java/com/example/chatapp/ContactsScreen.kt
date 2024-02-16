@@ -20,13 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.example.chatapp.data.DatabaseState
-import com.example.chatapp.data.SampleDataContacts
-
-data class Contact(val uid: Int, val name: String, val excerpt: String, val profilePicture: Int)
+import com.example.chatapp.models.Friend
 
 @Composable
 fun ContactCard(contact: Friend, onContactClick: (Friend) -> Unit = {}) {
