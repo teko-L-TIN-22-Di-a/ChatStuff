@@ -3,6 +3,7 @@ package com.example.chatapp
 import com.example.chatapp.data.SampleData
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -122,6 +123,7 @@ fun ChatApp(
     }
 
     Scaffold(
+        modifier = Modifier.imePadding(),
         topBar = {
             ChatAppTopBar(
                 currentScreen = currentScreen
@@ -149,16 +151,20 @@ fun ChatApp(
             }
 
             composable(route = ChatRoutes.Conversation.name) {
-                val currentConversation =
+                var currentConversation =
                     dbModel.conversationList.filter {
                         if(it.users != null) {
                             it.users.contains(uiState.currentConversationContact.uid)
                         } else {
                             false
                         }
-                    }.first()
+                    }.firstOrNull()
 
-                ConversationScreen(currentConversation, uiState.currentConversationContact)
+                if(currentConversation == null) {
+                    currentConversation = dataBaseModel.createEmptyConversation("", uiState.currentConversationContact.uid)
+                }
+
+                ConversationScreen(currentConversation, uiState.currentConversationContact, dataBaseModel)
             }
 
             composable(route = ChatRoutes.Login.name) {
@@ -171,7 +177,7 @@ fun ChatApp(
 
             composable(route = ChatRoutes.Contacts.name) {
                 ContactScreen(
-                    dbModel,
+                    dataBaseModel,
                     onContactClick = {
                         viewModel.setCurrentConversation(it)
                         navController.navigate(ChatRoutes.Conversation.name)
