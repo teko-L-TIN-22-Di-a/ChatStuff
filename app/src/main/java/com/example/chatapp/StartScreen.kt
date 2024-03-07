@@ -60,18 +60,18 @@ fun StartScreen(
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
 
     //Google Sign Up
-    var auth by remember { mutableStateOf(Firebase.auth) }
-    val launcher = rememberFirebaseAuthLauncher(
-        onAuthComplete = { result ->
-            user = result.user
-        },
-        onAuthError = {
-            user = null
-        }
-    )
+//    var auth by remember { mutableStateOf(Firebase.auth) }
+//    val launcher = rememberFirebaseAuthLauncher(
+//        onAuthComplete = { result ->
+//            user = result.user
+//        },
+//        onAuthError = {
+//            user = null
+//        }
+//    )
 
     val context = LocalContext.current
-    val token = stringResource(R.string.default_web_client_id)
+//    val token = stringResource(R.string.default_web_client_id)
 
     Column(
         modifier = modifier,
@@ -126,7 +126,7 @@ fun StartScreen(
                         .clip(CircleShape)
                 )
                 Spacer(Modifier.height(8.dp))
-                Text("Welcome ${user!!.displayName}")
+                Text("Welcome ${user!!.email}")
                 Spacer(Modifier.height(10.dp))
                 Button(onClick = {
                     Firebase.auth.signOut()

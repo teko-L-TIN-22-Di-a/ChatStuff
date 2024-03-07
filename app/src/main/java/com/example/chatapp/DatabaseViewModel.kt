@@ -32,7 +32,7 @@ class DatabaseViewModel : ViewModel() {
         val message: String = inputVal;
         if (message.isNotEmpty()) {
             firebaseDb.collection("conversation")
-                .whereArrayContains("users", dbState.value.auth.currentUser?.uid.toString())
+                .whereArrayContains("users", listOf(dbState.value.auth.currentUser?.uid.toString(), partnerUid))
                 .get()
                 .addOnSuccessListener { contacts ->
                     val documents = contacts.documents
@@ -40,8 +40,8 @@ class DatabaseViewModel : ViewModel() {
                     if (documents.isEmpty()) {
                         firebaseDb.collection("conversation").add(
                             Conversation(
-                                listOf(Message()),
-                                listOf(uid, partnerUid)
+                                listOf(Message(uid, Timestamp.now(), message)),
+                                listOf(partnerUid, uid)
                             )
                         )
                     } else {
@@ -49,13 +49,24 @@ class DatabaseViewModel : ViewModel() {
                             document.toObject<Conversation>()?.users!!.contains(
                                 uid
                             )
-                        }.first()
+                        }.firstOrNull()
 
-                        currentDocument?.reference?.update(
-                            "messages", FieldValue.arrayUnion(
-                                Message(uid, Timestamp.now(), message)
+                        if (currentDocument == null) {
+                            firebaseDb.collection("conversation").add(
+                                Conversation(
+                                    listOf(Message(uid, Timestamp.now(), message)),
+                                    listOf(partnerUid, uid)
+                                )
                             )
-                        )
+                        } else {
+                            currentDocument?.reference?.update(
+                                "messages", FieldValue.arrayUnion(
+                                    Message(uid, Timestamp.now(), message)
+                                )
+                            )
+                        }
+
+
                     }
 
 
@@ -63,15 +74,14 @@ class DatabaseViewModel : ViewModel() {
         }
     }
 
-    fun addFriend(uid: String) {
+    fun addFriend(email: String) {
         val myUser = Firebase.auth.currentUser
 
-        firebaseDb.collection("users").whereEqualTo("email", uid).limit(1).get()
+        firebaseDb.collection("users").whereEqualTo("email", email).limit(1).get()
             .addOnSuccessListener { friend ->
 
                 if (!friend.isEmpty()) {
                     val document = friend.documents[0]
-
                     val foundFriend = document.toObject<Friend>()
 
                     if (foundFriend != null) {
@@ -85,6 +95,59 @@ class DatabaseViewModel : ViewModel() {
                                     firebaseDb.collection("contacts").add(
                                         mapOf(
                                             "user" to User(listOf(), myUser!!.uid)
+                                        )
+                                    ).addOnSuccessListener { document ->
+                                        document.update(
+                                            "user.friends", FieldValue.arrayUnion(
+                                                Friend(
+                                                    foundFriend.email,
+                                                    foundFriend.name,
+                                                    foundFriend.uid
+                                                )
+                                            )
+                                        ).addOnSuccessListener { e ->
+                                            //reverse add
+                                            reverseAddFriend(myUser.email!!, foundFriend.uid)
+                                        }
+                                    }
+                                } else {
+                                    documents[0]?.reference?.update(
+                                        "user.friends", FieldValue.arrayUnion(
+                                            Friend(
+                                                foundFriend.email,
+                                                foundFriend.name,
+                                                foundFriend.uid
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                    }
+                }
+            }
+    }
+
+    fun reverseAddFriend(emailToAddFriendTo: String, uidToAddFriendTo: String) {
+        val myUser = Firebase.auth.currentUser
+
+        firebaseDb.collection("users").whereEqualTo("email", emailToAddFriendTo).limit(1).get()
+            .addOnSuccessListener { friend ->
+
+                if (!friend.isEmpty()) {
+                    val document = friend.documents[0]
+                    val foundFriend = document.toObject<Friend>()
+
+                    if (foundFriend != null) {
+                        firebaseDb.collection("contacts")
+                            .whereEqualTo("user.uid", uidToAddFriendTo).limit(1)
+                            .get()
+                            .addOnSuccessListener { contacts ->
+                                val documents = contacts.documents
+
+                                if (documents.isEmpty()) {
+                                    firebaseDb.collection("contacts").add(
+                                        mapOf(
+                                            "user" to User(listOf(), uidToAddFriendTo)
                                         )
                                     ).addOnSuccessListener { document ->
                                         document.update(

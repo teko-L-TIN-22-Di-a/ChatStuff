@@ -112,6 +112,7 @@ fun ChatApp(
 ) {
     val user by remember { mutableStateOf(Firebase.auth.currentUser) }
     val dbModel by dataBaseModel.dbState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = ChatRoutes.valueOf(
         backStackEntry?.destination?.route ?: ChatRoutes.Start.name
@@ -135,7 +136,6 @@ fun ChatApp(
             )
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
         NavHost(
             navController = navController,
             startDestination = ChatRoutes.Start.name,

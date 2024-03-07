@@ -4,6 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.chatapp.data.DatabaseState
 import com.example.chatapp.data.LoginState
 import com.example.chatapp.data.UiState
 import com.example.chatapp.models.Friend
@@ -23,6 +24,9 @@ class LoginViewModel : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState())
     val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
     val firebaseDb = FirebaseFirestore.getInstance()
+
+    private val _dbState = MutableStateFlow(DatabaseState())
+    val dbState: StateFlow<DatabaseState> = _dbState.asStateFlow()
 
     fun setEmail(value: String) {
         _loginState.update { currentState ->
@@ -83,7 +87,6 @@ class LoginViewModel : ViewModel() {
                             Friend()
                         }
                     )
-
 
                     setLoadingState(false)
                     startScreen()

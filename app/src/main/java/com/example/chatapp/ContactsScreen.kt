@@ -122,6 +122,8 @@ fun ContactScreen(
     onContactClick: (Friend) -> Unit = {}
 ) {
     val dbState by dbModel.dbState.collectAsState()
+    dbModel.getFriendlist()
+    dbModel.getConversationList()
 
 
     LazyColumn(
