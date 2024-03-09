@@ -32,7 +32,7 @@ class DatabaseViewModel : ViewModel() {
         val message: String = inputVal;
         if (message.isNotEmpty()) {
             firebaseDb.collection("conversation")
-                .whereArrayContains("users", listOf(dbState.value.auth.currentUser?.uid.toString(), partnerUid))
+                .whereArrayContains("users", dbState.value.auth.currentUser?.uid.toString())
                 .get()
                 .addOnSuccessListener { contacts ->
                     val documents = contacts.documents
@@ -46,8 +46,8 @@ class DatabaseViewModel : ViewModel() {
                         )
                     } else {
                         val currentDocument = documents.filter { document ->
-                            document.toObject<Conversation>()?.users!!.contains(
-                                uid
+                            document.toObject<Conversation>()?.users!!.containsAll(
+                                listOf(uid, partnerUid)
                             )
                         }.firstOrNull()
 
